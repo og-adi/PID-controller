@@ -21,16 +21,8 @@ def PID_controller(sensor_readings):
     motorSpeed = p * kp + i * ki + d * kd
     # Considering 100 as base speed
 
-    motorSpeedA = 100 + motorSpeed
-    motorSpeedB = 100 - motorSpeed
+    motorSpeedA = max(0, min(100 + motorSpeed, maxSpeed));
+    motorSpeedB = max(0, min(100 - motorSpeed, maxSpeed));
 
-    if (max(motorSpeedA,maxSpeed) == motorSpeedA):
-        motorSpeedA = maxSpeed
-    if (max(motorSpeedB,maxSpeed) == motorSpeedB):
-        motorSpeedB = maxSpeed
-    if min(motorSpeedA,0) == motorSpeedA:
-        motorSpeedA = 0
-    if min(motorSpeedB,0) == motorSpeedB:
-        motorSpeedB = 0
 
     return motorSpeedA, motorSpeedB
