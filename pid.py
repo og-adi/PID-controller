@@ -1,0 +1,36 @@
+def PID_controller(sensor_readings):
+    n_sensors = len(sensor_readings)
+
+    pos = 0
+    lasterr = 0
+    kp,ki,kd = 0.07,0.0008,0.6  # adjustable values
+    maxSpeed = 255
+
+    for i in range(0,n_sensors):
+        pos+=sensor_readings[i]*(i*1000)
+
+    pos = pos/sum(sensor_readings)
+
+    err = (n_sensors - 1)*500  - pos
+
+    p = err
+    i = err + i
+    d = lasterr - err
+    lasterr = err
+
+    motorSpeed = p * kp + i * ki + d * kd
+    # Considering 100 as base speed
+
+    motorSpeedA = 100 + motorSpeed
+    motorSpeedB = 100 - motorSpeed
+
+    if (max(motorSpeedA,maxSpeed) == motorSpeedA):
+        motorSpeedA = maxSpeed
+    if (max(motorSpeedB,maxSpeed) == motorSpeedB):
+        motorSpeedB = maxSpeed
+    if min(motorSpeedA,0) == motorSpeedA:
+        motorSpeedA = 0
+    if min(motorSpeedB,0) == motorSpeedB:
+        motorSpeedB = 0
+
+    return motorSpeedA, motorSpeedB
